@@ -1,0 +1,43 @@
+#!/bin/bash
+echo "**********************************************************************"
+echo "Manifest-Based Software Remover :: ./MBSR /manifest/path /removal/path"
+echo "**********************************************************************"
+#make manifest of $1
+	MANIFEST=$(ls $1 | cut -f2)
+	echo "$MANIFEST" > /tmp/MANIFEST
+#verify manifest
+	echo ""
+	echo "MBSR :: Does this look right?"
+	echo ""
+	head /tmp/MANIFEST
+	echo ""
+	rm -rf /tmp/MANIFEST
+#target MBSR at a directory
+	cd $2
+	echo "SYSTEM :: working directory changed to" $(pwd)
+	echo ""
+#confirm launch
+	echo "This will remove everything in the manifest at" $2
+	echo "Are you sure you want to do this? (y/N)"
+	read -e yn
+	if [[ $yn = '' ]]
+		then
+		exit
+	fi
+	if [[ $yn = 'n' ]]
+		then
+		exit
+	fi
+	if [[ $yn = 'y' ]]
+		then
+		for each in $MANIFEST
+		do
+			ITEM="${each}"
+			rm -rf $ITEM > /dev/null
+		done
+		exit
+else
+exit
+fi
+
+
